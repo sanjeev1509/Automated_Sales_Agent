@@ -1,0 +1,388 @@
+{
+  "name": "interia comm",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1620,
+        760
+      ],
+      "id": "aa77eb7a-2a0b-4324-8c3c-51ed27df4ffb",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appHAe1QZf3FxfKfo",
+          "mode": "list",
+          "cachedResultName": "Outbound Call Management System",
+          "cachedResultUrl": "https://airtable.com/appHAe1QZf3FxfKfo"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbltxcpEzvB5ng9eX",
+          "mode": "list",
+          "cachedResultName": "Lead",
+          "cachedResultUrl": "https://airtable.com/appHAe1QZf3FxfKfo/tbltxcpEzvB5ng9eX"
+        },
+        "filterByFormula": "({Status}='TBC')",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -1400,
+        760
+      ],
+      "id": "09c4a301-ef0e-486e-98f4-c08b05019601",
+      "name": "Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "DampSsPIDrciAaLJ",
+          "name": "ntk"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "64f35a94-0201-4797-a7b6-469b4f538732",
+              "name": "ID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "d5fd7acf-44e3-4bd0-b3ac-b18e5ba25f9a",
+              "name": "First Name",
+              "value": "={{ $json['First Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "365479e6-ae18-48ff-9a68-2035f0f4d0c8",
+              "name": "Mobile",
+              "value": "={{ $json.Mobile }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1180,
+        760
+      ],
+      "id": "5be69ebb-bafa-482d-ab39-bf274e0598e2",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.vapi.ai/call",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 3db13bd2-172d-4c1f-b706-d5843a0f82d1"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"assistantId\": \"8d21b1f5-c3f3-4dbb-b7bc-fb22afd4a3ae\",\n    \"customer\": {\n    \"name\": \"{{ $json['First Name'] }}\",\n    \"number\": \"{{ $json.Mobile }}\"\n  },\n  \"phoneNumberId\": \"c5851610-feba-47b3-a693-3a065d1af521\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        760
+      ],
+      "id": "00864702-a9e7-462a-b821-35d76e491b83",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appHAe1QZf3FxfKfo",
+          "mode": "list",
+          "cachedResultName": "Outbound Call Management System",
+          "cachedResultUrl": "https://airtable.com/appHAe1QZf3FxfKfo"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbltxcpEzvB5ng9eX",
+          "mode": "list",
+          "cachedResultName": "Lead",
+          "cachedResultUrl": "https://airtable.com/appHAe1QZf3FxfKfo/tbltxcpEzvB5ng9eX"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Edit Fields').item.json.ID }}",
+            "Status": "IN-Progress"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Date Time",
+              "displayName": "Date Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "TBC",
+                  "value": "TBC"
+                },
+                {
+                  "name": "IN-Progress",
+                  "value": "IN-Progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                },
+                {
+                  "name": "Failed",
+                  "value": "Failed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Attempt",
+              "displayName": "Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "#1",
+                  "value": "#1"
+                },
+                {
+                  "name": "#2",
+                  "value": "#2"
+                },
+                {
+                  "name": "Unreachable",
+                  "value": "Unreachable"
+                },
+                {
+                  "name": "Success",
+                  "value": "Success"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Final Call",
+              "displayName": "Final Call",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -740,
+        760
+      ],
+      "id": "91d104e6-8723-4512-8b98-3606840e0982",
+      "name": "Airtable1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "DampSsPIDrciAaLJ",
+          "name": "ntk"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Airtable1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7b59fc12-0916-4cc3-8b11-d655b2f4dc0a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4cab639ed5dce73f806d7481edeff99cdf46053fde99671ee1c2f16d88e7c24e"
+  },
+  "id": "LIGQvXl7yjfmYuDv",
+  "tags": []
+}
