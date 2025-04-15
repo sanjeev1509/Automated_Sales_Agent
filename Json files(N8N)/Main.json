@@ -1,5 +1,5 @@
 {
-  "name": "My workflow 4",
+  "name": "Main",
   "nodes": [
     {
       "parameters": {
@@ -85,7 +85,7 @@
             },
             {
               "id": "2cfa19d3-5db5-431b-bbbb-e8e58bf28da0",
-              "leftValue": "={{ $json.body.message.transcript }}",
+              "leftValue": "={{ $json.fields['transcript'] }}",
               "rightValue": "",
               "operator": {
                 "type": "string",
@@ -213,7 +213,8 @@
     },
     {
       "parameters": {
-        "amount": 1
+        "amount": 1,
+        "unit": "minutes"
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
@@ -1365,7 +1366,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "7d667fc1-5181-4b1d-a4b8-b0cc6179015c",
+  "versionId": "4ea01684-cc89-48e9-8e62-e05e4fa63ba0",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "4cab639ed5dce73f806d7481edeff99cdf46053fde99671ee1c2f16d88e7c24e"
